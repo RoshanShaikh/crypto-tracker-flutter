@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     return color;
   }
 
-  _getCryptoCurrencies() async {
+  Future<List> _getCryptoCurrencies() async {
     String url =
         'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=50&convert=USD';
     http.Response response = await http.get(
@@ -37,9 +37,8 @@ class _HomePageState extends State<HomePage> {
       },
     );
     var data = jsonDecode(response.body);
-    setState(() {
-      cryptoCurrencies = data['data'];
-    });
+    print(data['data']);
+    return data['data'];
   }
 
   @override
@@ -56,16 +55,30 @@ class _HomePageState extends State<HomePage> {
         elevation: 0.0,
         title: Text("Crypto Tracker"),
       ),
-      body: RefreshIndicator(
-        onRefresh: () {
-          return _getCryptoCurrencies();
+      body: FutureBuilder(
+        future: _getCryptoCurrencies(),
+        builder: (context, AsyncSnapshot<List> dataSnapshot) {
+          if (dataSnapshot.connectionState == ConnectionState.done) {
+            cryptoCurrencies = dataSnapshot.data!;
+            return RefreshIndicator(
+              onRefresh: () {
+                return _getCryptoCurrencies();
+              },
+              child: ListView.builder(
+                itemCount: cryptoCurrencies.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return _currencyWidget(cryptoCurrencies[index], index);
+                },
+              ),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
+            );
+          }
         },
-        child: ListView.builder(
-          itemCount: cryptoCurrencies.length,
-          itemBuilder: (BuildContext context, int index) {
-            return _currencyWidget(cryptoCurrencies[index], index);
-          },
-        ),
       ),
     );
   }
