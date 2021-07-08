@@ -5,20 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
-  final List cryptoCurrencies;
-
-  const HomePage({Key? key, required this.cryptoCurrencies}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState(cryptoCurrencies);
+  _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final List cryptoList;
-  late List cryptoCurrencies;
+  List cryptoCurrencies = [];
   List<Color> colors = [];
-
-  _HomePageState(this.cryptoList);
 
   Color getRandomColor() {
     Color color = Color.fromRGBO(
@@ -50,7 +45,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    cryptoCurrencies = cryptoList;
+    _getCryptoCurrencies();
   }
 
   @override
@@ -61,22 +56,16 @@ class _HomePageState extends State<HomePage> {
         elevation: 0.0,
         title: Text("Crypto Tracker"),
       ),
-      body: Column(
-        children: [
-          Flexible(
-            child: RefreshIndicator(
-              onRefresh: () {
-                return _getCryptoCurrencies();
-              },
-              child: ListView.builder(
-                itemCount: cryptoCurrencies.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return _currencyWidget(cryptoCurrencies[index], index);
-                },
-              ),
-            ),
-          )
-        ],
+      body: RefreshIndicator(
+        onRefresh: () {
+          return _getCryptoCurrencies();
+        },
+        child: ListView.builder(
+          itemCount: cryptoCurrencies.length,
+          itemBuilder: (BuildContext context, int index) {
+            return _currencyWidget(cryptoCurrencies[index], index);
+          },
+        ),
       ),
     );
   }
