@@ -95,13 +95,11 @@ class _HomePageState extends State<HomePage> {
           );
         },
         leading: CircleAvatar(
-          child: Flexible(
-            child: Text(
-              "${crypto['name'][0]}",
-              style: TextStyle(
-                fontSize: 30.0,
-                color: Colors.white,
-              ),
+          child: Text(
+            "${crypto['name'][0]}",
+            style: TextStyle(
+              fontSize: 30.0,
+              color: Colors.white,
             ),
           ),
           backgroundColor:
@@ -111,11 +109,13 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              crypto['name'],
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 18.00,
+            Flexible(
+              child: Text(
+                crypto['name'],
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18.00,
+                ),
               ),
             ),
             _getPriceText(
