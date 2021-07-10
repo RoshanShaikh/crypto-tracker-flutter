@@ -38,6 +38,7 @@ class _HomePageState extends State<HomePage> {
     );
     var data = jsonDecode(response.body);
     print(data['data']);
+    cryptoCurrencies = data['data'];
     return data['data'];
   }
 
