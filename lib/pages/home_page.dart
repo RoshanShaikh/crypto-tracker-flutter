@@ -38,14 +38,12 @@ class _HomePageState extends State<HomePage> {
     );
     var data = jsonDecode(response.body);
     print(data['data']);
-    cryptoCurrencies = data['data'];
     return data['data'];
   }
 
   @override
   void initState() {
     super.initState();
-    _getCryptoCurrencies();
   }
 
   @override
@@ -63,7 +61,8 @@ class _HomePageState extends State<HomePage> {
             cryptoCurrencies = dataSnapshot.data!;
             return RefreshIndicator(
               onRefresh: () {
-                return _getCryptoCurrencies();
+                setState(() {});
+                return Future.delayed(Duration(microseconds: 1));
               },
               child: ListView.builder(
                 itemCount: cryptoCurrencies.length,
